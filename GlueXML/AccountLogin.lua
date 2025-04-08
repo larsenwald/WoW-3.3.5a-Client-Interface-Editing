@@ -85,6 +85,8 @@ function AccountLogin_OnShow(self)
 	ACCOUNT_MSG_CURRENT_INDEX = nil;
 end
 
+--LARSENWALD COMMENT
+--[[
 function AccountLogin_OnHide(self)
 	--Stop the sounds from the login screen (like the dragon roaring etc)
 	StopAllSFX( 1.0 );
@@ -92,6 +94,7 @@ function AccountLogin_OnHide(self)
 		SetSavedAccountList("");
 	end
 end
+--]]
 
 function AccountLogin_FocusPassword()
 	PasswordEditBox:SetFocus();

@@ -264,7 +264,7 @@
 						<DisabledCheckedTexture file="Interface\Buttons\UI-CheckBox-Check-Disabled"/>
 					</CheckButton>
 
-					<Button name="Forgot Password">
+					<Button name="ForgotPasswordLink">
 						<Size x="90" y="90"/>
 						<Anchors>
 							<Anchor point="TOPLEFT" relativeTo="LoginUiTextureContainer" relativePoint="TOPLEFT">
@@ -274,7 +274,8 @@
 							</Anchor>
 						</Anchors>
 						<NormalTexture file="Interface\Buttons\forgot-password.blp"/>
-						<HighlightTexture file="Interface\Buttons\forgot-password.blp" alphaMode="ADD" alpha=".5"/>
+						<!--the alpha attribute controls how strong the highlight effect of the alphaMode="ADD" is-->
+						<HighlightTexture file="Interface\Buttons\forgot-password.blp" alphaMode="ADD" alpha=".6"/>
 						<HitRectInsets>
 							<AbsInset top="37" bottom="35"/>
 						</HitRectInsets>
@@ -312,7 +313,29 @@
 						</Scripts>
 						<NormalTexture file="Interface\Buttons\login-button"/>
 						<PushedTexture file="Interface\Buttons\login-button(mousedown)"/>
-						<HighlightTexture file="Interface\Buttons\login-button(hover)" alphaMode="ADD"/>
+						<HighlightTexture file="Interface\Buttons\login-button(hover)" alphaMode="ADD" alpha=".5"/>
+					</Button>
+
+					<Button name="SignUpLink">
+						<Size x="60" y="60"/>
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="LoginUiTextureContainer" relativePoint="TOPLEFT">
+								<Offset>
+									<AbsDimension x="197" y="-343"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<NormalTexture file="Interface\Buttons\sign-up.blp"/>
+						<!--the alpha attribute controls how strong the highlight effect of the alphaMode="ADD" is-->
+						<HighlightTexture file="Interface\Buttons\sign-up.blp" alphaMode="ADD" alpha=".6"/>
+						<HitRectInsets>
+							<AbsInset top="21" bottom="22"/>
+						</HitRectInsets>
+						<Scripts>
+							<OnClick>
+								LaunchURL("example.com");
+							</OnClick>						
+						</Scripts>
 					</Button>
 
 				</Frames>
@@ -609,7 +632,7 @@
 							</OnLoad>
 						</Scripts>
 					</Frame>
-					<Button name="AccountLoginLoginButton" inherits="GlueButtonTemplateBlue" text="LOGIN">
+					<!-- <Button name="AccountLoginLoginButton" inherits="GlueButtonTemplateBlue" text="LOGIN">
 						<Size x="220" y="45"/>
 						<Anchors>
 							<Anchor point="BOTTOM">
@@ -623,7 +646,7 @@
 								AccountLogin_Login();
 							</OnClick>
 						</Scripts>
-					</Button>
+					</Button> -->
 					<Button name="AccountLoginExitButton" inherits="GlueButtonSmallTemplateBlue" text="QUIT">
 						<Anchors>
 							<Anchor point="BOTTOMRIGHT">
@@ -2716,7 +2739,7 @@
 				AccountLogin_OnShow(self);
 			</OnShow>
 			<OnHide>
-				AccountLogin_OnHide(self);
+				--AccountLogin_OnHide(self);
 			</OnHide>
 			<OnKeyDown>
 				AccountLogin_OnKeyDown(key);
