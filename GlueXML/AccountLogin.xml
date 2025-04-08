@@ -130,19 +130,18 @@
 						</Anchors>
 						<Scripts>
 						<OnTabPressed>
-							self:ClearFocus()
 							local passwordEditBox = _G["PasswordEditBox"]
 							if passwordEditBox then
 								passwordEditBox:SetFocus()
 							end
 						</OnTabPressed>
-						<OnEscapePressed>
-							self:ClearFocus()
-						</OnEscapePressed>
 						<OnEnterPressed>
-							message("Testing: "..self:GetText())
-							self:SetText("")
-							self:ClearFocus()
+							local passwordEditBox = _G["PasswordEditBox"]
+							if (passwordEditBox:GetText() == "") then
+								passwordEditBox:SetFocus()
+							else
+								AccountLogin_Login();
+							end
 						</OnEnterPressed>
 						<OnEditFocusLost>
 							self:HighlightText(0, 0)
@@ -210,15 +209,11 @@
 						
 						<Scripts>
 						<OnTabPressed>
-							self:ClearFocus()
 							local usernameEditBox = _G["UsernameEditBox"]
 							if usernameEditBox then
 								usernameEditBox:SetFocus()
 							end
 						</OnTabPressed>
-						<OnEscapePressed>
-							self:ClearFocus()
-						</OnEscapePressed>
 						<OnEnterPressed>
 							AccountLogin_Login();
 						</OnEnterPressed>
@@ -269,17 +264,38 @@
 						<DisabledCheckedTexture file="Interface\Buttons\UI-CheckBox-Check-Disabled"/>
 					</CheckButton>
 
+					<Button name="Forgot Password">
+						<Size x="90" y="90"/>
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="LoginUiTextureContainer" relativePoint="TOPLEFT">
+								<Offset>
+									<AbsDimension x="185" y="-245"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<NormalTexture file="Interface\Buttons\forgot-password.blp"/>
+						<HighlightTexture file="Interface\Buttons\forgot-password.blp" alphaMode="ADD" alpha=".5"/>
+						<HitRectInsets>
+							<AbsInset top="37" bottom="35"/>
+						</HitRectInsets>
+						<Scripts>
+							<OnClick>
+								LaunchURL("example.com");
+							</OnClick>						
+						</Scripts>
+					</Button>
+
 					<Button name="AccountLoginLoginButton" text="LOGIN">
 						<Size x="125" y="115"/>
 						<Anchors>
 							<Anchor point="BOTTOM">
 								<Offset>
-									<AbsDimension x="0" y="278"/>
+									<AbsDimension x="0" y="280"/>
 								</Offset>
 							</Anchor>
 						</Anchors>
 						<HitRectInsets>
-							<AbsInset left="0" right="0" top="48" bottom="45"/>
+							<AbsInset left="5" right="5" top="39" bottom="29"/>
 						</HitRectInsets>
 						<Scripts>
 							<OnClick>
