@@ -8,8 +8,10 @@ The majority of the modifications are in `AccountLogin.lua` and `AccountLogin.xm
 
 This UI is heavily customized for my specific use case and isn't really intended for general adoption, but you're welcome to look through my changes and comments to see how I modified the standard WoW UI files.
 
-### Notes:
-Let's talk Strata. "Strata" are essentially layers but for frames (not to be confused with the '<layer>' tag that can be embedded into frames). For example, if you have a frame with its "frameStrata" attribute set to "MEDIUM" and another frame's set to "HIGH", the frame who's "frameStrata" attribute is set to "HIGH" will be on top of the one set to "MEDIUM"
+## Research Notes:
+### Important Concept: _Strata_
+
+"Strata" are essentially layers but for frames (not to be confused with the `<layer>` tag that can be embedded into frames). For example, if you have a frame with its `frameStrata` attribute equal to "MEDIUM" and another frame's equal to "HIGH", the frame who's "frameStrata" attribute is set to "HIGH" will appear on top of the one set to "MEDIUM"
 Strata Options (in ascending order):
 - "BACKGROUND"
 - "LOW"
@@ -19,3 +21,6 @@ Strata Options (in ascending order):
 - "FULLSCREEN"
 - "FULLSCREEN_DIALOG"
 - "TOOLTIP"
+
+Found this awesome visual:
+![image](https://github.com/user-attachments/assets/777ef384-3332-452f-8726-8d52b951e158)
