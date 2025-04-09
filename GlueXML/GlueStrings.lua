@@ -512,7 +512,7 @@ LOGIN_ENTER_NAME = "Please enter your account name.";
 LOGIN_ENTER_PASSWORD = "Please enter your password.";
 LOGIN_ERROR = "Error";
 LOGIN_EXPIRED = "<html><body><p align=\"CENTER\">Your game account subscription has expired. Please visit <a href=\"http://www.worldofwarcraft.com/account\">www.worldofwarcraft.com/account</a> to purchase. more time.</p></body></html>";
-LOGIN_FAILED = "<html><body><p align=\"CENTER\">Unable to connect. Please try again later. If the problem persists, please contact technical support at: <a href=\"http://us.blizzard.com/support/index.xml?gameId=11&amp;rootCategoryId=2316\">http://us.blizzard.com/support/index.xml?gameId=11&amp;rootCategoryId=2316</a></p></body></html>";
+LOGIN_FAILED = "Connection failed. Server might be down.";
 LOGIN_GAME_ACCOUNT_LOCKED = "<html><body><p align=\"CENTER\">Access to your account has been temporarily disabled. Please contact support for more information at: <a href=\"https://www.worldofwarcraft.com/account/account-error.html\">https://www.worldofwarcraft.com/account/account-error.html</a></p></body></html>";
 LOGIN_IGR_WITHOUT_BNET = "<html><body><p align=\"CENTER\">In order to log in to World of Warcraft using IGR time, this World of Warcraft account must first be merged with a Battle.net account. Please visit <a href=\"http://us.battle.net/\">http://us.battle.net/</a> to merge this account.</p></body></html>";
 LOGIN_INCORRECT_PASSWORD = "Incorrect Password";

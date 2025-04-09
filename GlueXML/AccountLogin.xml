@@ -106,7 +106,7 @@
 								</Anchors>
 								</Texture>
 							</Layer>
-							<Layer level="OVERLAY">
+							<!-- <Layer level="OVERLAY">
 								<Texture name="LoginUIElements" file="Interface\textures\login-elements">
 									<Size>
 										<AbsDimension x="350" y="750"/>
@@ -115,40 +115,96 @@
 										<Anchor point="TOPLEFT"/>
 									</Anchors>
 								</Texture>
-							</Layer>
+							</Layer> -->
 						</Layers>
 					</Frame>
-					<!-- First invisible EditBox (USERNAME) -->
+					<!-- First EditBox (USERNAME) -->
 					<EditBox name="UsernameEditBox" letters="20">
 						<Size x="193" y="37"/>
 						<Anchors>
-						<Anchor point="TOPLEFT" relativeTo="LoginUiTextureContainer" relativePoint="TOPLEFT">
-							<Offset>
-							<AbsDimension x="76" y="-191"/>
-							</Offset>
-						</Anchor>
+							<Anchor point="TOPLEFT" relativeTo="LoginUiTextureContainer" relativePoint="TOPLEFT">
+								<Offset>
+								<AbsDimension x="76" y="-191"/>
+								</Offset>
+							</Anchor>
 						</Anchors>
+						<Layers>
+							<Layer level="OVERLAY">
+								<Texture name="UsernameEditboxBorder" file="Interface\textures\editbox-border">
+									<Size>
+										<AbsDimension x="220" y="220"/>
+									</Size>
+									<Anchors>
+										<Anchor point="CENTER">
+											<Offset>
+												<AbsDimension x="0" y="4"/>
+											</Offset>
+										</Anchor>
+									</Anchors>
+								</Texture>
+							</Layer>
+						</Layers>
+						<Layers>
+							<Layer level="BACKGROUND">
+								<Texture file="Interface\textures\editbox-background">
+									<Size>
+										<AbsDimension x="220" y="220"/>
+									</Size>
+									<Anchors>
+										<Anchor point="CENTER">
+											<Offset>
+												<AbsDimension x="0" y="4"/>
+											</Offset>
+										</Anchor>
+									</Anchors>
+								</Texture>
+							</Layer>
+						</Layers>
 						<Scripts>
-						<OnTabPressed>
-							local passwordEditBox = _G["PasswordEditBox"]
-							if passwordEditBox then
-								passwordEditBox:SetFocus()
-							end
-						</OnTabPressed>
-						<OnEnterPressed>
-							local passwordEditBox = _G["PasswordEditBox"]
-							if (passwordEditBox:GetText() == "") then
-								passwordEditBox:SetFocus()
-							else
-								AccountLogin_Login();
-							end
-						</OnEnterPressed>
-						<OnEditFocusLost>
-							self:HighlightText(0, 0)
-						</OnEditFocusLost>
-						<OnEditFocusGained>
-							self:HighlightText()
-						</OnEditFocusGained>
+							<OnTabPressed>
+								local passwordEditBox = _G["PasswordEditBox"]
+								if passwordEditBox then
+									passwordEditBox:SetFocus()
+								end
+							</OnTabPressed>
+							<OnEnterPressed>
+								local passwordEditBox = _G["PasswordEditBox"]
+								if (passwordEditBox:GetText() == "") then
+									passwordEditBox:SetFocus()
+								else
+									AccountLogin_Login();
+								end
+							</OnEnterPressed>
+							<OnEditFocusLost>
+								self:HighlightText(0, 0)
+								local border = _G["UsernameEditboxBorder"]
+								if border and border.glow then
+									border.glow:Hide()
+								end
+							</OnEditFocusLost>
+							<OnEditFocusGained>
+								self:HighlightText()
+								local border = _G["UsernameEditboxBorder"]
+								if border then
+									-- Store the original texture
+									if not border.originalTexture then
+										border.originalTexture = border:GetTexture()
+									end
+									
+									-- Create a glow effect if it doesn't exist
+									if not border.glow then
+										border.glow = border:GetParent():CreateTexture(nil, "OVERLAY")
+										border.glow:SetTexture(border:GetTexture())
+										border.glow:SetBlendMode("ADD")
+										border.glow:SetAllPoints(border)
+										border.glow:SetVertexColor(0.7, 0.7, 1.0, 1)
+									end
+									
+									border.glow:Show()
+								else
+									message("Could not find UsernameEditboxBorder")
+								end
+							</OnEditFocusGained>
 							<OnTextChanged>
 								local accountName = GetSavedAccountName();
 								if ( accountName ~= "" and accountName ~= self:GetText() ) then
@@ -173,40 +229,77 @@
 							</Offset>
 						</Anchor>
 						</Anchors>
-						<!--This controls the label to the top of the input box-->
-						<!--
 						<Layers>
-						<Layer level="BACKGROUND">
-							<FontString name="$parentLabel" inherits="GlueFontNormal" justifyH="CENTER" text="PASSWORD">
-							<Size>
-								<AbsDimension x="256" y="64"/>
-							</Size>
-							<Anchors>
-								<Anchor point="BOTTOM" relativePoint="TOP">
-								<Offset>
-									<AbsDimension x="0" y="-23"/>
-								</Offset>
-								</Anchor>
-							</Anchors>
-							</FontString>
-						</Layer>
+							<!--This layer controls the label to the top of the input box-->
+							<!-- <Layer level="BACKGROUND">
+								<FontString name="$parentLabel" inherits="GlueFontNormal" justifyH="CENTER" text="PASSWORD">
+								<Size>
+									<AbsDimension x="256" y="64"/>
+								</Size>
+								<Anchors>
+									<Anchor point="BOTTOM" relativePoint="TOP">
+									<Offset>
+										<AbsDimension x="0" y="-23"/>
+									</Offset>
+									</Anchor>
+								</Anchors>
+								</FontString>
+							</Layer> -->
+						<!-- <Layer level="Background">
+							<Texture file="Interface\textures\editbox-border">
+								<Size>
+									<AbsDimension x="193" y="193"/>
+								</Size>
+								<Anchors>
+									<Anchor point="BOTTOM">
+										<Offset>
+											<AbsDimension x="0" y="-80"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+							</Texture>
+						</Layer> -->
+							<Layer level="OVERLAY">
+								<Texture name="PasswordEditboxBorder" file="Interface\textures\editbox-border">
+									<Size>
+										<AbsDimension x="220" y="220"/>
+									</Size>
+									<Anchors>
+										<Anchor point="CENTER">
+											<Offset>
+												<AbsDimension x="0" y="4"/>
+											</Offset>
+										</Anchor>
+									</Anchors>
+								</Texture>
+							</Layer>
+							<Layer level="BACKGROUND" toplevel="true">
+								<Texture file="Interface\textures\editbox-background">
+									<Size>
+										<AbsDimension x="220" y="220"/>
+									</Size>
+									<Anchors>
+										<Anchor point="CENTER">
+											<Offset>
+												<AbsDimension x="0" y="4"/>
+											</Offset>
+										</Anchor>
+									</Anchors>
+								</Texture>
+							</Layer>
 						</Layers>
-						-->
-
-						<!-- This controls the border of the input box--> 
-						
-						<!-- <Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Glues\Common\Glue-Tooltip-Border" tile="true">
-											<BackgroundInsets>
-												<AbsInset left="10" right="5" top="4" bottom="9"/>
-											</BackgroundInsets>
-											<TileSize>
-												<AbsValue val="16"/>
-											</TileSize>
-											<EdgeSize>
-												<AbsValue val="16"/>
-											</EdgeSize>
+					<!-- This controls the border of the input box--> 
+					<!-- <Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Glues\Common\Glue-Tooltip-Border" tile="true">
+										<BackgroundInsets>
+											<AbsInset left="10" right="5" top="4" bottom="9"/>
+										</BackgroundInsets>
+										<TileSize>
+											<AbsValue val="16"/>
+										</TileSize>
+										<EdgeSize>
+											<AbsValue val="16"/>
+										</EdgeSize>
 						</Backdrop> -->
-						
 						<Scripts>
 						<OnTabPressed>
 							local usernameEditBox = _G["UsernameEditBox"]
@@ -219,9 +312,34 @@
 						</OnEnterPressed>
 						<OnEditFocusLost>
 							self:HighlightText(0, 0)
+							self:HighlightText(0, 0)
+							local border = _G["PasswordEditboxBorder"]
+							if border and border.glow then
+								border.glow:Hide()
+							end
 						</OnEditFocusLost>
 						<OnEditFocusGained>
 							self:HighlightText()
+							local border = _G["PasswordEditboxBorder"]
+							if border then
+								-- Store the original texture
+								if not border.originalTexture then
+									border.originalTexture = border:GetTexture()
+								end
+								
+								-- Create a glow effect if it doesn't exist
+								if not border.glow then
+									border.glow = border:GetParent():CreateTexture(nil, "OVERLAY")
+									border.glow:SetTexture(border:GetTexture())
+									border.glow:SetBlendMode("ADD")
+									border.glow:SetAllPoints(border)
+									border.glow:SetVertexColor(0.7, 0.7, 1.0, 1)
+								end
+								
+								border.glow:Show()
+							else
+								message("Could not find PasswordEditboxBorder")
+							end
 						</OnEditFocusGained>
 						</Scripts>
 						<FontString inherits="GlueEditBoxFont"/>
