@@ -22,5 +22,6 @@ Strata Options (in ascending order):
 - "FULLSCREEN_DIALOG"
 - "TOOLTIP"
 
-Found this awesome visual:
 ![image](https://github.com/user-attachments/assets/777ef384-3332-452f-8726-8d52b951e158)
+<div align="center"><em>Found this awesome visual online ^</em></div>
+<div align="center"><a href="https://wowpedia.fandom.com/wiki/Frame_Strata?file=Frame_Strata.png" target="_blank">https://wowpedia.fandom.com/wiki/Frame_Strata?file=Frame_Strata.png</a></div>
