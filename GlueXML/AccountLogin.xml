@@ -1,6 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\FrameXML\UI.xsd">
-	<Script file="AccountLogin.lua"/>	
+	<Script file="AccountLogin.lua"/>
+	<Script file="larsenLearning.lua"/>
 	<Button name="AccountNameButton" virtual="true">
 		<Size x="250" y="20"/>
 		<Layers>
@@ -165,6 +166,8 @@
 								local passwordEditBox = _G["PasswordEditBox"]
 								if passwordEditBox then
 									passwordEditBox:SetFocus()
+									passwordEditBox:HighlightText()
+									self:HighlightText(0, 0);
 								end
 							</OnTabPressed>
 							<OnEnterPressed>
@@ -183,14 +186,9 @@
 								end
 							</OnEditFocusLost>
 							<OnEditFocusGained>
-								self:HighlightText()
+								--self:HighlightText()
 								local border = _G["UsernameEditboxBorder"]
-								if border then
-									-- Store the original texture
-									if not border.originalTexture then
-										border.originalTexture = border:GetTexture()
-									end
-									
+								if border then									
 									-- Create a glow effect if it doesn't exist
 									if not border.glow then
 										border.glow = border:GetParent():CreateTexture(nil, "OVERLAY")
@@ -305,28 +303,22 @@
 							local usernameEditBox = _G["UsernameEditBox"]
 							if usernameEditBox then
 								usernameEditBox:SetFocus()
+								usernameEditBox:HighlightText()
 							end
 						</OnTabPressed>
 						<OnEnterPressed>
 							AccountLogin_Login();
 						</OnEnterPressed>
 						<OnEditFocusLost>
-							self:HighlightText(0, 0)
-							self:HighlightText(0, 0)
 							local border = _G["PasswordEditboxBorder"]
 							if border and border.glow then
 								border.glow:Hide()
 							end
+							self:HighlightText(0, 0);
 						</OnEditFocusLost>
 						<OnEditFocusGained>
-							self:HighlightText()
 							local border = _G["PasswordEditboxBorder"]
-							if border then
-								-- Store the original texture
-								if not border.originalTexture then
-									border.originalTexture = border:GetTexture()
-								end
-								
+							if border then							
 								-- Create a glow effect if it doesn't exist
 								if not border.glow then
 									border.glow = border:GetParent():CreateTexture(nil, "OVERLAY")
