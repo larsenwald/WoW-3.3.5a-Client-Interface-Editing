@@ -84,7 +84,7 @@
 	<ModelFFX name="AccountLogin" toplevel="true" parent="GlueParent" setAllPoints="true" enableKeyboard="true" hidden="true" fogNear="0" fogFar="1200" glow="0.08">
 		<Frames>
 		<!--LARSEN'S LOGIN UI FRAME-->
-			<Frame name="LoginUiDiv" setAllPoints="true">
+			<Frame name="LoginUiDiv" setAllPoints="true" enableMouse="true">
 				<Frames>
 					<Frame name="LoginUiTextureContainer">
 						<Size x="500" y="500"/>
@@ -119,7 +119,7 @@
 						</Layers>
 					</Frame>
 					<!-- First EditBox (USERNAME) -->
-					<EditBox name="UsernameEditBox" letters="20">
+					<EditBox name="UsernameEditBox" letters="20" frameStrata="HIGH">
 						<Size x="193" y="37"/>
 						<Anchors>
 							<Anchor point="TOPLEFT" relativeTo="LoginUiTextureContainer" relativePoint="TOPLEFT">
@@ -143,25 +143,8 @@
 									</Anchors>
 								</Texture>
 							</Layer>
-							<Layer level="BACKGROUND" toplevel="true">
-								<Texture file="Interface\textures\editbox-background">
-									<Size>
-										<AbsDimension x="220" y="220"/>
-									</Size>
-									<Anchors>
-										<Anchor point="CENTER">
-											<Offset>
-												<AbsDimension x="0" y="4"/>
-											</Offset>
-										</Anchor>
-									</Anchors>
-								</Texture>
-							</Layer>
 						</Layers>
 						<Scripts>
-							<OnLoad>
-								
-							</OnLoad>
 							<OnTabPressed>
 								local passwordEditBox = _G["PasswordEditBox"]
 								if passwordEditBox then
@@ -182,7 +165,18 @@
 								self:HighlightText(0, 0)
 								local border = _G["UsernameEditboxBorder"]
 								if border and border.glow then
-									border.glow:Hide()
+								
+									--Fade-out animation
+									local startTime = GetTime()
+									self:SetScript("OnUpdate", function(self, elapsed)
+										local timeElapsed = GetTime() - startTime
+										local desiredDuration = .25 -- in seconds
+										local progress = timeElapsed / desiredDuration
+										if progress >= 1 then progress = 1 end
+
+										border.glow:SetAlpha(1 - progress)										
+
+									end)
 								end
 							</OnEditFocusLost>
 							<OnEditFocusGained>
@@ -195,13 +189,23 @@
 										border.glow:SetTexture(border:GetTexture())
 										border.glow:SetBlendMode("ADD")
 										border.glow:SetAllPoints(border)
-										border.glow:SetVertexColor(0.7, 0.7, 1.0, 1)
 									end
-									
-									border.glow:Show()
+								
+									--Fade-in animation
+									local startTime = GetTime()
+									self:SetScript("OnUpdate", function(self, elapsed)
+										local timeElapsed = GetTime() - startTime
+										local desiredDuration = .25 -- in seconds
+										local progress = timeElapsed / desiredDuration
+										if progress >= 1 then progress = 1 end
+
+										border.glow:SetAlpha(progress)										
+
+									end)
 								else
 									message("Could not find UsernameEditboxBorder")
 								end
+								
 							</OnEditFocusGained>
 							<OnTextChanged>
 								local accountName = GetSavedAccountName();
@@ -217,8 +221,36 @@
 						</TextInsets>
 					</EditBox>
 
+					<!-- Made the editbox background its own frame as a workaround for a weird bug that caused the background to not spawn sometimes when its layer is set to BACKGROUND -->
+					<Frame name="UsernameEditboxBackgroundFrame">
+						<Size x="220" y="220"/>
+						<Anchors>
+							<Anchor point="TOP">
+								<Offset>
+									<AbsDimension x="0" y="-195"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Layers>
+							<Layer>
+									<Texture name="PasswordEditboxBackground" file="Interface\textures\editbox-background">
+										<Size>
+											<AbsDimension x="220" y="220"/>
+										</Size>
+										<Anchors>
+											<Anchor point="CENTER">
+												<Offset>
+													<AbsDimension x="0" y="0"/>
+												</Offset>
+											</Anchor>
+										</Anchors>
+									</Texture>
+								</Layer>
+							</Layers>
+					</Frame>
+
 					<!-- Second invisible EditBox (PASSWORD), same logic, slightly lower -->
-					<EditBox name="PasswordEditBox" password="true">
+					<EditBox name="PasswordEditBox" password="true" frameStrata="HIGH">
 						<Size x="193" y="37"/>
 						<Anchors>
 						<Anchor point="TOPLEFT" relativeTo="LoginUiTextureContainer" relativePoint="TOPLEFT">
@@ -271,20 +303,6 @@
 									</Anchors>
 								</Texture>
 							</Layer>
-							<Layer level="BACKGROUND">
-								<Texture file="Interface\textures\editbox-background">
-									<Size>
-										<AbsDimension x="220" y="220"/>
-									</Size>
-									<Anchors>
-										<Anchor point="CENTER">
-											<Offset>
-												<AbsDimension x="0" y="4"/>
-											</Offset>
-										</Anchor>
-									</Anchors>
-								</Texture>
-							</Layer>
 						</Layers>
 					<!-- This controls the border of the input box--> 
 					<!-- <Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Glues\Common\Glue-Tooltip-Border" tile="true">
@@ -312,23 +330,42 @@
 							<OnEditFocusLost>
 								local border = _G["PasswordEditboxBorder"]
 								if border and border.glow then
-									border.glow:Hide()
+									--Animation
+									local startTime = GetTime()
+									self:SetScript("OnUpdate", function(self, elapsed)
+										local timeElapsed = GetTime() - startTime
+										local desiredDuration = .25 -- in seconds
+										local progress = timeElapsed / desiredDuration
+										if progress >= 1 then progress = 1 end
+
+										border.glow:SetAlpha(1 - progress)										
+
+									end)
 								end
 								self:HighlightText(0, 0);
 							</OnEditFocusLost>
 							<OnEditFocusGained>
 								local border = _G["PasswordEditboxBorder"]
 								if border then							
-									-- Create a glow effect if it doesn't exist
+									-- create a glow effect if it doesn't exist
 									if not border.glow then
 										border.glow = border:GetParent():CreateTexture(nil, "OVERLAY")
 										border.glow:SetTexture(border:GetTexture())
 										border.glow:SetBlendMode("ADD")
 										border.glow:SetAllPoints(border)
-										border.glow:SetVertexColor(0.7, 0.7, 1.0, 1)
 									end
 									
-									border.glow:Show()
+									--Animation
+									local startTime = GetTime()
+									self:SetScript("OnUpdate", function(self, elapsed)
+										local timeElapsed = GetTime() - startTime
+										local desiredDuration = .25 -- in seconds
+										local progress = timeElapsed / desiredDuration
+										if progress >= 1 then progress = 1 end
+
+										border.glow:SetAlpha(progress)										
+
+									end)
 								else
 									message("Could not find PasswordEditboxBorder")
 								end
@@ -339,6 +376,34 @@
 						<AbsInset left="12" right="5" bottom="5"/>
 						</TextInsets>
 					</EditBox>
+
+					<!-- Made the editbox background its own frame as a workaround for a weird bug that caused the background to not spawn sometimes when on layer "BACKGROUND" -->
+					<Frame name="PasswordEditboxBackgroundFrame">
+						<Size x="220" y="220"/>
+						<Anchors>
+							<Anchor point="TOP">
+								<Offset>
+									<AbsDimension x="0" y="-245"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Layers>
+							<Layer>
+									<Texture name="PasswordEditboxBackground" file="Interface\textures\editbox-background">
+										<Size>
+											<AbsDimension x="220" y="220"/>
+										</Size>
+										<Anchors>
+											<Anchor point="CENTER">
+												<Offset>
+													<AbsDimension x="0" y="0"/>
+												</Offset>
+											</Anchor>
+										</Anchors>
+									</Texture>
+								</Layer>
+							</Layers>
+					</Frame>
 
 					<CheckButton name="RememberMeCheckButton" toplevel="true">
 						<Size>
@@ -447,9 +512,34 @@
 							</OnClick>						
 						</Scripts>
 					</Button>
+
+					<EditBox name="PlaceholderEditBox">
+						<Size x="100" y="32"/>
+						<Anchors>
+							<Anchor point="TOP">
+								<Offset x="0" y="9999"/>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnTabPressed>
+								UsernameEditBox:SetFocus();
+							</OnTabPressed>
+						</Scripts>
+					</EditBox>
 				</Frames>
-			<!--END OF LARSEN'S LOGIN UI FRAME-->
+				<Scripts>
+					<OnLoad>
+						self:SetScript("OnUpdate", function(self, elapsed)
+							PlaceholderEditBox:SetFocus();
+							self:SetScript("OnUpdate", nil)
+						end)
+					</OnLoad>
+					<OnMouseDown>
+						PlaceholderEditBox:SetFocus();
+					</OnMouseDown>
+				</Scripts>
 			</Frame>
+			<!--END OF LARSEN'S LOGIN UI FRAME-->
 			<Frame name="AccountLoginUI" setAllPoints="true">
 				<!-- <Layers>
 					<Layer level="ARTWORK">
