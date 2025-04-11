@@ -1,22 +1,32 @@
-local myLearningFrame = CreateFrame("Frame", "MyLearningFrame", AccountLogin)
+local myLearningFrame = CreateFrame("Frame", "MyLearningFrame", UIParent)
 myLearningFrame:SetFrameStrata("HIGH")
 myLearningFrame:SetPoint("TOP", 0, 0)
 myLearningFrame:SetSize(200, 200)
-myLearningFrame:EnableMouse(true)
-myLearningFrame:Show()
+myLearningFrame:EnableMouse(true) --//TO ENABLE MOUSE CLICKS
 
-myLearningFrame:SetScript("OnMouseDown", function(self)
-    message("mousedown working!")
+fs = myLearningFrame:CreateFontString(nil, "OVERLAY", "GlueFontNormal")
+fs:SetPoint("TOP", 0, 0)
+fs:SetText("Hello World!")
 
-    -- Create a FontString in this frame:
-    fs = self:CreateFontString(nil, "OVERLAY", "GlueFontNormal")
+local function easeOutQuad(progress)
+    return 1 - (1 - progress)^2
+end
 
-    -- Place the text in the middle of the frame
-    fs:SetPoint("CENTER", 0, 0)
+myLearningFrame:SetScript("OnMouseDown", function()
+    local startTime = GetTime();
+    local _, _, _, _, yOffset = fs:GetPoint();
+    myLearningFrame:SetScript("OnUpdate", function(self, elapsed)
+        local timeElapsed = GetTime() - startTime;
+        local desiredDuration = 1 --seconds
+        local progress = timeElapsed/desiredDuration
     
-    -- Ensure it's visible and set some text
-    fs:SetText("Hello World!")
+        if progress > 1 then progress = 1 end
     
-    -- Optionally, set a color to be extra sure it's white and fully opaque
-    fs:SetTextColor(1, 1, 1, 1)
+        local desiredOffset = -200
+        
+        fs:SetPoint("TOP", 0, yOffset + easeOutQuad(progress) * desiredOffset)
+    end)
 end)
+
+--message(fs:GetAlpha())
+--message(time())
