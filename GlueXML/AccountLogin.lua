@@ -46,12 +46,13 @@ function AccountLogin_OnShow(self)
 	-- Try to show the EULA or the TOS
 	AccountLogin_ShowUserAgreements();
 	
-	local serverName = GetServerName();
+	--Larsen comment
+	--[[local serverName = GetServerName();
 	if(serverName) then
 		AccountLoginRealmName:SetText(serverName);
 	else
 		AccountLoginRealmName:Hide()
-	end
+	end]]
 
 	local accountName = GetSavedAccountName();
 	
@@ -72,11 +73,12 @@ function AccountLogin_OnShow(self)
 		AccountLogin_FocusPassword();
 	end
 	
-	if( IsTrialAccount() ) then
+	--Larsen comment
+	--[[if( IsTrialAccount() ) then
 		AccountLoginUpgradeAccountButton:Show();
 	else
 		AccountLoginUpgradeAccountButton:Hide();
-	end
+	end]]
 
 	ACCOUNT_MSG_NUM_AVAILABLE = 0;
 	ACCOUNT_MSG_PRIORITY = 0;
