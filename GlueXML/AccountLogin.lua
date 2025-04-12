@@ -744,3 +744,9 @@ function Cinematics_PlayMovie(self)
 	MovieFrame.version = self:GetID();
 	SetGlueScreen("movie");
 end
+
+
+--Larsen's functions
+function easeOutExpo(progress, exponent)
+	return 1 - (1 - progress)^exponent
+end

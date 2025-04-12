@@ -118,13 +118,14 @@
 							</Layer> -->
 						</Layers>
 					</Frame>
+
 					<!-- First EditBox (USERNAME) -->
 					<EditBox name="UsernameEditBox" letters="20" frameStrata="HIGH">
 						<Size x="193" y="37"/>
 						<Anchors>
 							<Anchor point="TOPLEFT" relativeTo="LoginUiTextureContainer" relativePoint="TOPLEFT">
 								<Offset>
-								<AbsDimension x="76" y="-191"/>
+								<AbsDimension x="79" y="-185"/>
 								</Offset>
 							</Anchor>
 						</Anchors>
@@ -138,6 +139,20 @@
 										<Anchor point="CENTER">
 											<Offset>
 												<AbsDimension x="0" y="4"/>
+											</Offset>
+										</Anchor>
+									</Anchors>
+								</Texture>
+							</Layer>
+							<Layer level="OVERLAY">
+								<Texture name="UsernameString" file="Interface\textures\username-string">
+									<Size>
+										<AbsDimension x="100" y="30"/>
+									</Size>
+									<Anchors>
+										<Anchor point="CENTER">
+											<Offset>
+												<AbsDimension x="0" y="3"/>
 											</Offset>
 										</Anchor>
 									</Anchors>
@@ -163,9 +178,10 @@
 							</OnEnterPressed>
 							<OnEditFocusLost>
 								self:HighlightText(0, 0)
+								UsernameString:SetBlendMode("BLEND")
 								local border = _G["UsernameEditboxBorder"]
 								if border and border.glow then
-								
+
 									--Fade-out animation
 									local startTime = GetTime()
 									self:SetScript("OnUpdate", function(self, elapsed)
@@ -180,7 +196,7 @@
 								end
 							</OnEditFocusLost>
 							<OnEditFocusGained>
-								--self:HighlightText()
+								UsernameString:SetBlendMode("ADD")
 								local border = _G["UsernameEditboxBorder"]
 								if border then									
 									-- Create a glow effect if it doesn't exist
@@ -210,9 +226,38 @@
 							<OnTextChanged>
 								local accountName = GetSavedAccountName();
 								if ( accountName ~= "" and accountName ~= self:GetText() ) then
-								SetSavedAccountName("");
-								RememberMeCheckButton:SetChecked(0);
+									SetSavedAccountName("");
+									RememberMeCheckButton:SetChecked(0);
 								end
+
+								if self:GetText() ~= "" and 101 >= UsernameString:GetWidth() and UsernameString:GetWidth() >= 100 then
+									local startTime = GetTime()
+									self:SetScript("OnUpdate", function(self, elapsed)
+										local timeElapsed = GetTime() - startTime
+										local desiredDuration = .8 --seconds
+										local progress = timeElapsed / desiredDuration
+										if progress >= 1 then progress = 1 end
+
+										UsernameString:SetPoint("CENTER", 0 - 63*easeOutExpo(progress, 4), 3 + 22*easeOutExpo(progress, 4))
+										UsernameString:SetSize(100 - 20*easeOutExpo(progress, 4), 30 - 4*easeOutExpo(progress, 4))
+
+									end)																	
+								end
+
+								if self:GetText() == "" and  81 >= UsernameString:GetWidth() and UsernameString:GetWidth() >= 80 then
+									local startTime = GetTime()
+									self:SetScript("OnUpdate", function(self, elapsed)
+										local timeElapsed = GetTime() - startTime
+										local desiredDuration = .8 --seconds
+										local progress = timeElapsed / desiredDuration
+										if progress >= 1 then progress = 1 end
+
+										UsernameString:SetPoint("CENTER", -63 + 63*easeOutExpo(progress, 4), 25 - 22*easeOutExpo(progress, 4))
+										UsernameString:SetSize(80 + 20*easeOutExpo(progress, 4), 26 + 4*easeOutExpo(progress, 4))
+
+									end)
+								end
+
 							</OnTextChanged>
 						</Scripts>
 						<FontString inherits="GlueEditBoxFont"/>
@@ -220,6 +265,20 @@
 						<AbsInset left="12" right="5" bottom="5"/>
 						</TextInsets>
 					</EditBox>
+					<!--The following is a placeholder frame I can delegate scripts to-->
+					<Frame name="ScriptsFrame">
+						<Scripts>
+							<OnLoad>
+								self:SetScript("OnUpdate", function(self, elapsed)
+										if UsernameEditBox:GetText() ~= "" then
+										UsernameString:SetPoint("CENTER", -63, 25)
+										UsernameString:SetSize(80, 26)
+									end
+									self:SetScript("OnUpdate", nil)
+								end)
+							</OnLoad>
+						</Scripts>
+					</Frame>
 
 					<!-- Made the editbox background its own frame as a workaround for a weird bug that caused the background to not spawn sometimes when its layer is set to BACKGROUND -->
 					<Frame name="UsernameEditboxBackgroundFrame">
@@ -227,7 +286,7 @@
 						<Anchors>
 							<Anchor point="TOP">
 								<Offset>
-									<AbsDimension x="0" y="-195"/>
+									<AbsDimension x="0" y="-190"/>
 								</Offset>
 							</Anchor>
 						</Anchors>
@@ -255,7 +314,7 @@
 						<Anchors>
 						<Anchor point="TOPLEFT" relativeTo="LoginUiTextureContainer" relativePoint="TOPLEFT">
 							<Offset>
-							<AbsDimension x="76" y="-240"/>
+							<AbsDimension x="79" y="-235"/>
 							</Offset>
 						</Anchor>
 						</Anchors>
@@ -303,6 +362,20 @@
 									</Anchors>
 								</Texture>
 							</Layer>
+							<Layer level="OVERLAY">
+								<Texture name="PasswordString" file="Interface\textures\password-string">
+									<Size>
+										<AbsDimension x="100" y="30"/>
+									</Size>
+									<Anchors>
+										<Anchor point="CENTER">
+											<Offset>
+												<AbsDimension x="0" y="3"/>
+											</Offset>
+										</Anchor>
+									</Anchors>
+								</Texture>
+							</Layer>
 						</Layers>
 					<!-- This controls the border of the input box--> 
 					<!-- <Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Glues\Common\Glue-Tooltip-Border" tile="true">
@@ -328,6 +401,7 @@
 								AccountLogin_Login();
 							</OnEnterPressed>
 							<OnEditFocusLost>
+								PasswordString:SetBlendMode("BLEND")
 								local border = _G["PasswordEditboxBorder"]
 								if border and border.glow then
 									--Animation
@@ -345,6 +419,7 @@
 								self:HighlightText(0, 0);
 							</OnEditFocusLost>
 							<OnEditFocusGained>
+								PasswordString:SetBlendMode("ADD")
 								local border = _G["PasswordEditboxBorder"]
 								if border then							
 									-- create a glow effect if it doesn't exist
@@ -370,6 +445,55 @@
 									message("Could not find PasswordEditboxBorder")
 								end
 							</OnEditFocusGained>
+							<OnTextChanged>
+								if PasswordEditBox:GetText() == "" then
+									ScriptsFrame:SetScript("OnUpdate", nil)
+									local _, _, _, xOffset, yOffset = PasswordString:GetPoint()
+									local xSize, ySize = PasswordString:GetSize()
+									local xSizeDiff = 100 - xSize
+									local ySizeDiff = 30 - ySize
+									local xDiff = 0 - xOffset
+									local yDiff = 3 - yOffset
+									local startTime = GetTime();
+									ScriptsFrame:SetScript("OnUpdate", function(self, elapsed)
+										local timeElapsed = GetTime() - startTime
+										local desiredDuration = .8 --seconds
+										local progress = timeElapsed / desiredDuration
+										if 0 > progress then
+											progress = 0
+										elseif progress >= 1 then
+											progress = 1
+											self:SetScript("OnUpdate", nil) -- stop animating
+										end
+
+										PasswordString:SetPoint("CENTER", xOffset + xDiff*easeOutExpo(progress, 4), yOffset + yDiff*easeOutExpo(progress, 4))
+										PasswordString:SetSize(xSize + xSizeDiff*easeOutExpo(progress, 4), ySize + ySizeDiff*easeOutExpo(progress, 4))
+									end)
+								else
+									ScriptsFrame:SetScript("OnUpdate", nil)
+									local _, _, _, xOffset, yOffset = PasswordString:GetPoint()
+									local xSize, ySize = PasswordString:GetSize()
+									local xSizeDiff = 80 - xSize
+									local ySizeDiff = 26 - ySize
+									local xDiff = -63 - xOffset
+									local yDiff = 25 - yOffset
+									local startTime = GetTime();
+									ScriptsFrame:SetScript("OnUpdate", function(self, elapsed)
+										local timeElapsed = GetTime() - startTime
+										local desiredDuration = .5 --seconds
+										local progress = timeElapsed / desiredDuration
+										if 0 > progress then
+											progress = 0
+										elseif progress >= 1 then
+											progress = 1
+											self:SetScript("OnUpdate", nil) -- stop animating
+										end
+
+										PasswordString:SetPoint("CENTER", xOffset + xDiff*progress, yOffset + yDiff*progress)
+										PasswordString:SetSize(xSize + xSizeDiff*progress, ySize + ySizeDiff*progress)
+									end)
+								end
+							</OnTextChanged>
 						</Scripts>
 						<FontString inherits="GlueEditBoxFont"/>
 						<TextInsets>
@@ -383,7 +507,7 @@
 						<Anchors>
 							<Anchor point="TOP">
 								<Offset>
-									<AbsDimension x="0" y="-245"/>
+									<AbsDimension x="0" y="-240"/>
 								</Offset>
 							</Anchor>
 						</Anchors>
@@ -522,7 +646,11 @@
 						</Anchors>
 						<Scripts>
 							<OnTabPressed>
-								UsernameEditBox:SetFocus();
+								local usernameEditBox = _G["UsernameEditBox"]
+								if usernameEditBox then
+									usernameEditBox:SetFocus()
+									usernameEditBox:HighlightText()
+								end
 							</OnTabPressed>
 						</Scripts>
 					</EditBox>
