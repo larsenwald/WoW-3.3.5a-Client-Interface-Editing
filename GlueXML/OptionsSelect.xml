@@ -43,7 +43,7 @@
 								</Anchor>
 							</Anchors>
 						</Texture>
-						<FontString name="$parentHeaderText" inherits="GlueFontNormal" text="OPTIONS">
+						<FontString name="$parentHeaderText" inherits="GlueFontNormal" text="Settings">
 							<Anchors>
 								<Anchor point="TOP" relativeTo="$parentHeader">
 									<Offset>

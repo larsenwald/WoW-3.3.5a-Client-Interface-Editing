@@ -224,40 +224,57 @@
 								
 							</OnEditFocusGained>
 							<OnTextChanged>
-								local accountName = GetSavedAccountName();
-								if ( accountName ~= "" and accountName ~= self:GetText() ) then
-									SetSavedAccountName("");
-									RememberMeCheckButton:SetChecked(0);
-								end
-
-								if self:GetText() ~= "" and 101 >= UsernameString:GetWidth() and UsernameString:GetWidth() >= 100 then
-									local startTime = GetTime()
-									self:SetScript("OnUpdate", function(self, elapsed)
+								if UsernameEditBox:GetText() == "" then
+									ScriptsFrame:SetScript("OnUpdate", nil)
+									local _, _, _, xOffset, yOffset = UsernameString:GetPoint()
+									local xSize, ySize = UsernameString:GetSize()
+									local xSizeDiff = 100 - xSize
+									local ySizeDiff = 30 - ySize
+									local xDiff = 0 - xOffset
+									local yDiff = 3 - yOffset
+									local ratio = xSizeDiff/20
+									local startTime = GetTime();
+									ScriptsFrame:SetScript("OnUpdate", function(self, elapsed)
 										local timeElapsed = GetTime() - startTime
 										local desiredDuration = .8 --seconds
-										local progress = timeElapsed / desiredDuration
-										if progress >= 1 then progress = 1 end
+										local progress = timeElapsed / (desiredDuration*ratio)
+										--clamp progress to only ever be between 0 and 1
+										if 0 > progress then
+											progress = 0
+										elseif progress >= 1 then
+											progress = 1
+											self:SetScript("OnUpdate", nil) -- stop animating
+										end
 
-										UsernameString:SetPoint("CENTER", 0 - 63*easeOutExpo(progress, 4), 3 + 22*easeOutExpo(progress, 4))
-										UsernameString:SetSize(100 - 20*easeOutExpo(progress, 4), 30 - 4*easeOutExpo(progress, 4))
-
-									end)																	
-								end
-
-								if self:GetText() == "" and  81 >= UsernameString:GetWidth() and UsernameString:GetWidth() >= 80 then
-									local startTime = GetTime()
-									self:SetScript("OnUpdate", function(self, elapsed)
+										UsernameString:SetPoint("CENTER", xOffset + xDiff*easeOutExpo(progress, 4), yOffset + yDiff*easeOutExpo(progress, 4))
+										UsernameString:SetSize(xSize + xSizeDiff*easeOutExpo(progress, 4), ySize + ySizeDiff*easeOutExpo(progress, 4))
+									end)
+								else
+									ScriptsFrame:SetScript("OnUpdate", nil)
+									local _, _, _, xOffset, yOffset = UsernameString:GetPoint()
+									local xSize, ySize = UsernameString:GetSize()
+									local xSizeDiff = 80 - xSize
+									local ySizeDiff = 26 - ySize
+									local xDiff = -63 - xOffset
+									local yDiff = 25 - yOffset
+									local ratio = xSizeDiff/20 * -1
+									local startTime = GetTime();
+									ScriptsFrame:SetScript("OnUpdate", function(self, elapsed)
 										local timeElapsed = GetTime() - startTime
 										local desiredDuration = .8 --seconds
-										local progress = timeElapsed / desiredDuration
-										if progress >= 1 then progress = 1 end
+										local progress = timeElapsed / (desiredDuration*ratio)
+										--clamp progress to only ever be between 0 and 1
+										if 0 > progress then
+											progress = 0
+										elseif progress >= 1 then
+											progress = 1
+											self:SetScript("OnUpdate", nil) -- stop animating
+										end
 
-										UsernameString:SetPoint("CENTER", -63 + 63*easeOutExpo(progress, 4), 25 - 22*easeOutExpo(progress, 4))
-										UsernameString:SetSize(80 + 20*easeOutExpo(progress, 4), 26 + 4*easeOutExpo(progress, 4))
-
+										UsernameString:SetPoint("CENTER", xOffset + xDiff*easeOutExpo(progress, 4), yOffset + yDiff*easeOutExpo(progress, 4))
+										UsernameString:SetSize(xSize + xSizeDiff*easeOutExpo(progress, 4), ySize + ySizeDiff*easeOutExpo(progress, 4))
 									end)
 								end
-
 							</OnTextChanged>
 							<OnEscapePressed>
 								PlaceholderEditBox:SetFocus();
@@ -458,11 +475,13 @@
 									local ySizeDiff = 30 - ySize
 									local xDiff = 0 - xOffset
 									local yDiff = 3 - yOffset
+									local ratio = xSizeDiff/20
 									local startTime = GetTime();
 									ScriptsFrame:SetScript("OnUpdate", function(self, elapsed)
 										local timeElapsed = GetTime() - startTime
 										local desiredDuration = .8 --seconds
-										local progress = timeElapsed / desiredDuration
+										local progress = timeElapsed / (desiredDuration*ratio)
+										--clamp progress to only ever be between 0 and 1
 										if 0 > progress then
 											progress = 0
 										elseif progress >= 1 then
@@ -481,11 +500,13 @@
 									local ySizeDiff = 26 - ySize
 									local xDiff = -63 - xOffset
 									local yDiff = 25 - yOffset
+									local ratio = xSizeDiff/20 * -1
 									local startTime = GetTime();
 									ScriptsFrame:SetScript("OnUpdate", function(self, elapsed)
 										local timeElapsed = GetTime() - startTime
-										local desiredDuration = .5 --seconds
-										local progress = timeElapsed / desiredDuration
+										local desiredDuration = .8 --seconds
+										local progress = timeElapsed / (desiredDuration*ratio)
+										--clamp progress to only ever be between 0 and 1
 										if 0 > progress then
 											progress = 0
 										elseif progress >= 1 then
@@ -493,8 +514,8 @@
 											self:SetScript("OnUpdate", nil) -- stop animating
 										end
 
-										PasswordString:SetPoint("CENTER", xOffset + xDiff*progress, yOffset + yDiff*progress)
-										PasswordString:SetSize(xSize + xSizeDiff*progress, ySize + ySizeDiff*progress)
+										PasswordString:SetPoint("CENTER", xOffset + xDiff*easeOutExpo(progress, 4), yOffset + yDiff*easeOutExpo(progress, 4))
+										PasswordString:SetSize(xSize + xSizeDiff*easeOutExpo(progress, 4), ySize + ySizeDiff*easeOutExpo(progress, 4))
 									end)
 								end
 							</OnTextChanged>
@@ -699,15 +720,33 @@
 								</Offset>
 							</Anchor>
 						</Anchors>
-						<NormalTexture file="Interface\textures\exit-icon"/>
+						<Layers>
+							<Layer>
+								<FontString name="ExitString" inherits="GlueFontNormalSmall" text="Exit" hidden="true">
+									<Anchors>
+										<Anchor point="CENTER">
+											<Offset>
+												<AbsDimension x="-25" y="0"/>
+											</Offset>
+										</Anchor>
+									</Anchors>
+								</FontString>
+							</Layer>
+						</Layers>
+						<NormalTexture file="Interface\textures\exit-icon1"/>
 						<!--the alpha attribute controls how strong the highlight effect of the alphaMode="ADD" is-->
-						<HighlightTexture file="Interface\textures\exit-icon" alphaMode="ADD" alpha=".6"/>
+						<HighlightTexture file="Interface\textures\exit-icon1" alphaMode="ADD" alpha=".6"/>
 						<HitRectInsets>
 							<AbsInset right="1" left="1"/>
 						</HitRectInsets>
 						<Scripts>
+							<OnEnter>
+								ExitString:Show();
+							</OnEnter>
+							<OnLeave>
+								ExitString:Hide();
+							</OnLeave>
 							<OnClick>
-								PlaySound("gsTitleQuit");
 								QuitGame();
 							</OnClick>						
 						</Scripts>
@@ -722,13 +761,32 @@
 								</Offset>
 							</Anchor>
 						</Anchors>
-						<NormalTexture file="Interface\textures\settings-icon"/>
+						<Layers>
+							<Layer>
+								<FontString name="SettingsString" inherits="GlueFontNormalSmall" text="Settings" hidden="true">
+									<Anchors>
+										<Anchor point="CENTER">
+											<Offset>
+												<AbsDimension x="43" y="0"/>
+											</Offset>
+										</Anchor>
+									</Anchors>
+								</FontString>
+							</Layer>
+						</Layers>
+						<NormalTexture file="Interface\textures\settings-icon1"/>
 						<!--the alpha attribute controls how strong the highlight effect of the alphaMode="ADD" is-->
-						<HighlightTexture file="Interface\textures\settings-icon" alphaMode="ADD" alpha=".6"/>
+						<HighlightTexture file="Interface\textures\settings-icon1" alphaMode="ADD" alpha=".6"/>
 						<HitRectInsets>
 							<AbsInset right="1" left="1"/>
 						</HitRectInsets>
 						<Scripts>
+							<OnEnter>
+								SettingsString:Show();
+							</OnEnter>
+							<OnLeave>
+								SettingsString:Hide();
+							</OnLeave>
 							<OnClick>
 								PlaySound("gsTitleOptions");
 								OptionsSelectFrame:Show();
