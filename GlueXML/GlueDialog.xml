@@ -22,10 +22,10 @@
 		<NormalFont style="GlueFontNormal"/>
 		<HighlightFont style="GlueFontHighlight"/>
 		<DisabledFont style="GlueFontDisable"/>
-		<NormalTexture inherits="GluePanelButtonUpTexture"/>
-		<PushedTexture inherits="GluePanelButtonDownTexture"/>
-		<DisabledTexture inherits="GluePanelButtonDisabledTexture"/>
-		<HighlightTexture inherits="GluePanelButtonHighlightTexture"/>
+		<NormalTexture file="Interface\textures\black-marble-gold-button"/>
+		<PushedTexture file="Interface\textures\black-marble-gold-button"/>
+		<DisabledTexture/>
+		<HighlightTexture file="Interface\textures\black-marble-gold-button" alphaMode="ADD" alpha=".6"/>
 	</Button>
 	<Frame name="GlueDialog" toplevel="true" parent="GlueParent" setAllPoints="true" enableMouse="true" enableKeyboard="true" frameStrata="DIALOG" hidden="true">
 		<Frames>

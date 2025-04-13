@@ -32,7 +32,7 @@ function AccountLogin_OnLoad(self)
 		AccountLoginCinematicsButton:Disable();
 		--AccountLogin:SetModel("Interface\\Glues\\Models\\UI_MainMenu\\UI_MainMenu.m2");
 	else
-		AccountLogin:SetModel("Interface\\Glues\\models\\ui_mainmenu_dragonflight\\ui_mainmenu_dragonisles.m2");
+		AccountLogin:SetModel("Interface\\Glues\\models\\ui_darkirondwarf\\ui_darkirondwarf.m2");
 	end
 end
 
@@ -751,4 +751,22 @@ end
 --Larsen's functions
 function easeOutExpo(progress, exponent)
 	return 1 - (1 - progress)^exponent
+end
+
+function easeOutElastic(t, amplitude, period)
+	-- defaults for more natural bounce
+	amplitude = amplitude or 1
+	period = period or 0.3
+
+	if t == 0 then return 0 end
+	if t == 1 then return 1 end
+
+	local s = period / (2 * math.pi) * math.asin(1 / amplitude)
+	return amplitude * math.pow(2, -10 * t) * math.sin((t - s) * (2 * math.pi) / period) + 1
+end
+
+function easeOutBack(t)
+	local c1 = 1.70158
+	local c3 = c1 + 1
+	return 1 + c3 * math.pow(t - 1, 3) + c1 * math.pow(t - 1, 2)
 end

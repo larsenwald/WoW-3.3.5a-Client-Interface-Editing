@@ -649,9 +649,9 @@ function GlueDialog_OnUpdate(self, elapsed)
 	for i=1, MAX_NUM_GLUE_DIALOG_BUTTONS do
 		button = _G[ "GlueDialogButton"..i ];
 		if ( button and (CURRENT_GLUE_SCREEN == "login") or (CURRENT_GLUE_SCREEN == "realmwizard") or CURRENT_GLUE_SCREEN == "movie" ) then
-			button:SetNormalTexture("Interface\\Glues\\Common\\Glue-Panel-Button-Up-Blue");
-			button:SetPushedTexture("Interface\\Glues\\Common\\Glue-Panel-Button-Down-Blue");
-			button:SetHighlightTexture("Interface\\Glues\\Common\\Glue-Panel-Button-Highlight-Blue");
+			--button:SetNormalTexture("Interface\textures\Glue-Panel-Button-Up-Blue1");
+			--button:SetPushedTexture("Interface\\Glues\\Common\\Glue-Panel-Button-Down-Blue");
+			--button:SetHighlightTexture("Interface\\Glues\\Common\\Glue-Panel-Button-Highlight-Blue");
 		else
 			button:SetNormalTexture("Interface\\Glues\\Common\\Glue-Panel-Button-Up");
 			button:SetPushedTexture("Interface\\Glues\\Common\\Glue-Panel-Button-Down");

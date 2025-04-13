@@ -84,7 +84,15 @@
 	<ModelFFX name="AccountLogin" toplevel="true" parent="GlueParent" setAllPoints="true" enableKeyboard="true" hidden="true" fogNear="0" fogFar="1200" glow="0.08">
 		<Frames>
 		<!--LARSEN'S LOGIN UI FRAME-->
-			<Frame name="LoginUiDiv" setAllPoints="true" enableMouse="true">
+			<Frame name="LoginUiDiv" enableMouse="true">
+				<Size x="1024" y="768"/>
+				<Anchors>
+					<Anchor point="CENTER">
+						<Offset>
+							<AbsDimension x="0" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
 				<Frames>
 					<Frame name="LoginUiTextureContainer">
 						<Size x="500" y="500"/>
@@ -274,6 +282,11 @@
 										UsernameString:SetPoint("CENTER", xOffset + xDiff*easeOutExpo(progress, 4), yOffset + yDiff*easeOutExpo(progress, 4))
 										UsernameString:SetSize(xSize + xSizeDiff*easeOutExpo(progress, 4), ySize + ySizeDiff*easeOutExpo(progress, 4))
 									end)
+								end
+								local accountName = GetSavedAccountName();
+								if ( accountName ~= "" and accountName ~= self:GetText() ) then
+									SetSavedAccountName("");
+									RememberMeCheckButton:SetChecked(0);
 								end
 							</OnTextChanged>
 							<OnEscapePressed>
@@ -740,9 +753,34 @@
 							<AbsInset right="1" left="1"/>
 						</HitRectInsets>
 						<Scripts>
-							<OnEnter>
-								ExitString:Show();
-							</OnEnter>
+						<OnEnter>
+							local label = ExitString
+							local startX = -5
+							local endX = -25
+							local startTime = GetTime()
+							local duration = 0.6
+
+							label:SetAlpha(0)
+							label:Show()
+
+							ScriptsFrame:SetScript("OnUpdate", function(self)
+								local timeElapsed = GetTime() - startTime
+								local t = timeElapsed / duration
+								if t >= 1 then
+									t = 1
+									ScriptsFrame:SetScript("OnUpdate", nil)
+								end
+
+								-- Decoupled easing
+								local posProgress = easeOutBack(t)
+								local alphaProgress = math.min(t * 1.5, 1) -- speed up fade a bit
+
+								local currentX = startX + (endX - startX) * posProgress
+								label:ClearAllPoints()
+								label:SetPoint("CENTER", currentX, 0)
+								label:SetAlpha(alphaProgress)
+							end)
+						</OnEnter>
 							<OnLeave>
 								ExitString:Hide();
 							</OnLeave>
@@ -781,9 +819,34 @@
 							<AbsInset right="1" left="1"/>
 						</HitRectInsets>
 						<Scripts>
-							<OnEnter>
-								SettingsString:Show();
-							</OnEnter>
+						<OnEnter>
+							local label = SettingsString
+							local startX = 10
+							local endX = 43
+							local startTime = GetTime()
+							local duration = 0.6
+
+							label:SetAlpha(0)
+							label:Show()
+
+							ScriptsFrame:SetScript("OnUpdate", function(self)
+								local timeElapsed = GetTime() - startTime
+								local t = timeElapsed / duration
+								if t >= 1 then
+									t = 1
+									ScriptsFrame:SetScript("OnUpdate", nil)
+								end
+
+								-- Decoupled easing
+								local posProgress = easeOutBack(t)
+								local alphaProgress = math.min(t * 1.5, 1) -- speed up fade a bit
+
+								local currentX = startX + (endX - startX) * posProgress
+								label:ClearAllPoints()
+								label:SetPoint("CENTER", currentX, 0)
+								label:SetAlpha(alphaProgress)
+							end)
+						</OnEnter>
 							<OnLeave>
 								SettingsString:Hide();
 							</OnLeave>
@@ -820,12 +883,28 @@
 					</EditBox>
 				</Frames>
 				<Scripts>
-					<OnLoad>
-						self:SetScript("OnUpdate", function(self, elapsed)
-							PlaceholderEditBox:SetFocus();
+				<OnLoad>
+					local startTime = GetTime()
+					local duration = 2
+
+					self:SetScript("OnUpdate", function(self)
+						local t = (GetTime() - startTime) / duration
+						if t >= 1 then
+							t = 1
 							self:SetScript("OnUpdate", nil)
-						end)
-					</OnLoad>
+						end
+
+						local eased = easeOutExpo(t, 4)
+						self:ClearAllPoints()
+						self:SetPoint("CENTER", 0, 40 * (1 - eased))
+						self:SetAlpha(eased)
+
+						-- also ensure placeholder gets focus
+						if PlaceholderEditBox then
+							PlaceholderEditBox:SetFocus()
+						end
+					end)
+				</OnLoad>
 					<OnMouseDown>
 						PlaceholderEditBox:SetFocus();
 					</OnMouseDown>
