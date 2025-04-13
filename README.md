@@ -8,6 +8,13 @@ The majority of the modifications are in `AccountLogin.lua` and `AccountLogin.xm
 
 This UI is heavily customized for my specific use case and isn't really intended for general adoption, but you're welcome to look through my changes and comments to see how I modified the standard WoW UI files.
 
+- **Currently**: Trying to figure out how to create an .m2 model file for an animated background of the login screen. As of now, I'm using the dark iron dwarf background which seems to work best (I was able to achieve this using this [awesome mod](https://www.nexusmods.com/worldofwarcraft/mods/852?tab=description)). Here's what the login screen currently looks like:
+
+
+https://github.com/user-attachments/assets/a7c39004-e72b-4738-87c8-d1aaac2d0375
+
+
+
 ## Research Notes:
 ### Important Concept: _Strata_
 
